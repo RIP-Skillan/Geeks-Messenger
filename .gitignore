@@ -44,3 +44,6 @@
 build/
 *.pb.cc
 *.pb.h
+
+#cmake files
+*.cmake

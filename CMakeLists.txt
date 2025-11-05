@@ -12,3 +12,13 @@ enable_testing()
 # Add subdirectories
 add_subdirectory(src)
 add_subdirectory(tests)
+
+# Ensure modern policy behavior
+cmake_policy(SET CMP0167 NEW)
+
+# Explicitly request Boost.System
+find_package(Boost 1.83 REQUIRED COMPONENTS system)
+
+# Include headers
+include_directories(${Boost_INCLUDE_DIRS})
+
