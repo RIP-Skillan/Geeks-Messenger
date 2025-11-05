@@ -39,3 +39,8 @@
 
 # debug information files
 *.dwo
+
+#Build & Proto Files
+build/
+*.pb.cc
+*.pb.h

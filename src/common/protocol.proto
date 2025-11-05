@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package geeks;
+
+message ChatMessage {
+    string from = 1;
+    string to = 2;
+    string txt = 3;
+}
