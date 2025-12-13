@@ -18,12 +18,54 @@ void ChatClient::do_connect() {
         [this](boost::system::error_code ec, const tcp::endpoint&) {
             if (!ec) {
                 std::cout << "Connected to server\n";
+                read_header();
             } else {
                 std::cerr << "Connection failed: " << ec.message() << "\n";
-                /* socket_.close(); */   
             }
         }
     );
+}
+
+void ChatClient::read_header() {
+    boost::asio::async_read(
+        socket_,
+        boost::asio::buffer(header_),
+        [this](boost::system::error_code ec, std::size_t) {
+            if (!ec) {
+                uint32_t length = 0;
+                std::memcpy(&length, header_.data(), 4);
+                length = ntohl(length);
+                read_body(length);
+            } else {
+                std::cerr << "Disconnected from server: " << ec.message() << "\n";
+                socket_.close();
+            }
+        });
+}
+
+void ChatClient::read_body(std::size_t length) {
+    body_.resize(length);
+    boost::asio::async_read(
+        socket_,
+        boost::asio::buffer(body_),
+        [this](boost::system::error_code ec, std::size_t) {
+            if (!ec) {
+                geeks::ChatMessage msg;
+                if (msg.ParseFromArray(body_.data(), body_.size())) {
+                    if (msg.type() == geeks::ChatMessage::MESSAGE) {
+                        std::cout << "\n[" << msg.from_user() << "] " << msg.text() << "\n";
+                    } else if (msg.type() == geeks::ChatMessage::JOIN) {
+                         std::cout << "\n[System] " << msg.from_user() << " joined the room.\n";
+                    } else if (msg.type() == geeks::ChatMessage::ERROR) {
+                         std::cout << "\n[Error] " << msg.text() << "\n";
+                    }
+                }
+                read_header();
+            } else {
+                std::cerr << "Error reading body: " << ec.message() << "\n";
+                socket_.close();
+            }
+        });
 }
 
 void ChatClient::write(const geeks::ChatMessage& msg) {

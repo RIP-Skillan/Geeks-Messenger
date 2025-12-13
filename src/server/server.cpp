@@ -15,7 +15,7 @@ void ChatServer::do_accept() {
         [this](boost::system::error_code ec, tcp::socket socket) {
             if (!ec) {
                 std::cout << "[Server] Client connected: " << socket.remote_endpoint() << std::endl;
-                auto session = std::make_shared<Session>(std::move(socket));
+                auto session = std::make_shared<Session>(std::move(socket), room_manager_);
                 session->start();
 
             } else {

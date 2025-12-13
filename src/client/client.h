@@ -19,12 +19,15 @@ public:
 private:
     void do_write();
     void do_connect();
+    void read_header();
+    void read_body(std::size_t length);
 
     boost::asio::io_context& io_;
     tcp::resolver resolver_;
     tcp::socket socket_;
     std::string host_;
     unsigned short port_;
-    std::array<char, 1024> buffer_;
+    std::array<char, 4> header_;
+    std::vector<char> body_;
     std::deque<std::vector<uint8_t>> write_queue_;
 };
