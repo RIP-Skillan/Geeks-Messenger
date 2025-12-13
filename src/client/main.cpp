@@ -14,15 +14,29 @@ int main(int argc, char* argv[]) {
         if (argc > 2) port = static_cast<unsigned short>(std::stoi(argv[2]));
 
         boost::asio::io_context io;
+        auto work = boost::asio::make_work_guard(io);
         ChatClient client(io, host, port);
 
         std::cout << "🚀 Connecting to " << host << ":" << port << std::endl;
         client.start();
-        io.run();
-        
+
+        std::thread t([&io]() { io.run(); });
+
+        std::string line;
+        while (std::getline(std::cin, line)) {
+            geeks::ChatMessage msg;
+            msg.set_from_user("client");
+            msg.set_to_user("server");
+            msg.set_text(line);
+            
+            client.write(msg);
+        }
+
+        work.reset();
+        t.join();
+
     } catch (std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
     }
 
-    return 0;
 }

@@ -3,7 +3,7 @@ syntax = "proto3";
 package geeks;
 
 message ChatMessage {
-    string from = 1;
-    string to = 2;
-    string txt = 3;
+  string from_user = 1;
+  string to_user = 2;
+  string text = 3;
 }

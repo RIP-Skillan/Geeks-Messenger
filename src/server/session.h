@@ -1,6 +1,7 @@
 #pragma once
 #include <boost/asio.hpp>
 #include <memory>
+#include <vector>
 
 using boost::asio::ip::tcp;
 
@@ -10,9 +11,11 @@ public:
     void start();
 
 private:
-    void do_read();
+    void read_header();
+    void read_body(std::size_t length);
+    /*void do_read();*/
 
     tcp::socket socket_;
-    std::array<char, 1024> buffer_;
+    std::array<char, 4> header_;
+    std::vector<char> body_;
 };
-
