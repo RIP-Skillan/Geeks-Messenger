@@ -26,16 +26,24 @@ find_package(Boost 1.74 REQUIRED COMPONENTS system)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # CPack Configuration
+# CPack Configuration
 set(CPACK_PACKAGE_NAME "geeks-messenger-client")
 set(CPACK_PACKAGE_VENDOR "RIP-Skillan")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A C++ CLI Chat Client")
 set(CPACK_PACKAGE_VERSION "1.0.0")
 set(CPACK_PACKAGE_CONTACT "maintainer@example.com")
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE") # Ensure you have a LICENSE file or remove this
+# set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE") # Uncomment if you have a LICENSE file
 
-# Debian specific
-set(CPACK_GENERATOR "DEB")
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "RIP-Skillan")
+if(WIN32)
+    set(CPACK_GENERATOR "NSIS")
+    set(CPACK_NSIS_MODIFY_PATH ON)
+    set(CPACK_NSIS_DISPLAY_NAME "Geeks Messenger Client")
+    set(CPACK_NSIS_PACKAGE_NAME "Geeks Messenger Client")
+elseif(UNIX)
+    set(CPACK_GENERATOR "DEB")
+    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "RIP-Skillan")
+    set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON) # Auto-detect dependencies
+endif()
 
 include(CPack)
 
