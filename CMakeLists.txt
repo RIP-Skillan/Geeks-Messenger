@@ -14,10 +14,13 @@ add_subdirectory(src)
 add_subdirectory(tests)
 
 # Ensure modern policy behavior
-cmake_policy(SET CMP0167 NEW)
+# Ensure modern policy behavior if available
+if(POLICY CMP0167)
+    cmake_policy(SET CMP0167 NEW)
+endif()
 
 # Explicitly request Boost.System
-find_package(Boost 1.83 REQUIRED COMPONENTS system)
+find_package(Boost 1.74 REQUIRED COMPONENTS system)
 
 # Include headers
 include_directories(${Boost_INCLUDE_DIRS})
