@@ -47,3 +47,23 @@ build/
 
 #cmake files
 *.cmake
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Packaging
+*.deb
+*.rpm
+*.tar.gz
+*.zip
+
+# Tooling
+compile_commands.json
+.clang-format

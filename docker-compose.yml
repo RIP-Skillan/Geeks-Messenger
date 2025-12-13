@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  server:
+    build: .
+    image: geeks-messenger-server
+    ports:
+      - "12345:12345"
+    restart: always
+    container_name: geeks-messenger-server
+
+  client:
+    build: .
+    image: geeks-messenger-server
+    command: ./client_app server 12345
+    depends_on:
+      - server
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+    profiles: [ "cli" ] # Don't start with 'up', use 'run'

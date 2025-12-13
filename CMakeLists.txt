@@ -22,3 +22,17 @@ find_package(Boost 1.83 REQUIRED COMPONENTS system)
 # Include headers
 include_directories(${Boost_INCLUDE_DIRS})
 
+# CPack Configuration
+set(CPACK_PACKAGE_NAME "geeks-messenger-client")
+set(CPACK_PACKAGE_VENDOR "RIP-Skillan")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A C++ CLI Chat Client")
+set(CPACK_PACKAGE_VERSION "1.0.0")
+set(CPACK_PACKAGE_CONTACT "maintainer@example.com")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE") # Ensure you have a LICENSE file or remove this
+
+# Debian specific
+set(CPACK_GENERATOR "DEB")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "RIP-Skillan")
+
+include(CPack)
+
