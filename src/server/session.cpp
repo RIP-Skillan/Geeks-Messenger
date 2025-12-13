@@ -27,6 +27,9 @@ void Session::read_header() {
                 std::cout << "Client disconnected: " << ec.message() << "\n";
                 if (room_) {
                     room_->leave(shared_from_this());
+                    if (room_->empty()) {
+                        room_manager_.remove_room(room_->id());
+                    }
                 }
             }
         });
@@ -48,6 +51,9 @@ void Session::read_body(std::size_t length) {
                         std::cout << "User " << username_ << " joining room " << msg.room_id() << "\n";
                         if (room_) {
                             room_->leave(shared_from_this());
+                            if (room_->empty()) {
+                                room_manager_.remove_room(room_->id());
+                            }
                         }
                         auto new_room = room_manager_.get_or_create_room(msg.room_id(), msg.password());
                         if (new_room) {
@@ -70,6 +76,9 @@ void Session::read_body(std::size_t length) {
                         if (room_) {
                             std::cout << "User " << username_ << " leaving room " << msg.room_id() << "\n";
                             room_->leave(shared_from_this());
+                            if (room_->empty()) {
+                                room_manager_.remove_room(room_->id());
+                            }
                             room_.reset();
                         }
                     }
@@ -79,6 +88,9 @@ void Session::read_body(std::size_t length) {
                 std::cout << "Error reading body: " << ec.message() << "\n";
                 if (room_) {
                     room_->leave(shared_from_this());
+                    if (room_->empty()) {
+                        room_manager_.remove_room(room_->id());
+                    }
                 }
             }
         });
@@ -118,6 +130,9 @@ void Session::do_write() {
                 std::cout << "Write error: " << ec.message() << "\n";
                 if (room_) {
                     room_->leave(shared_from_this());
+                    if (room_->empty()) {
+                        room_manager_.remove_room(room_->id());
+                    }
                 }
             }
         });

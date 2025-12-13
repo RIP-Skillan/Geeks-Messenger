@@ -9,7 +9,14 @@ class Session;
 
 class Room {
 public:
-    Room(const std::string& password = "") : password_(password) {}
+    Room(const std::string& id, const std::string& password = "") 
+        : id_(id), password_(password) {}
+
+    std::string id() const { return id_; }
+
+    bool empty() const {
+        return participants_.empty();
+    }
 
     bool check_password(const std::string& pwd) const {
         return password_ == pwd;
@@ -47,6 +54,7 @@ public:
 
 private:
     std::set<std::shared_ptr<Session>> participants_;
+    std::string id_;
     std::string password_;
 };
 
@@ -67,10 +75,16 @@ public:
             }
         }
         
-        auto new_room = std::make_shared<Room>(password);
+        auto new_room = std::make_shared<Room>(room_id, password);
         rooms_[room_id] = new_room;
         std::cout << "Created new room: " << room_id << " with password: " << password << "\n";
         return new_room;
+    }
+
+    void remove_room(const std::string& room_id) {
+        std::lock_guard<std::mutex> lock(mutex_);
+        rooms_.erase(room_id);
+        std::cout << "Room removed: " << room_id << "\n";
     }
 
 private:
