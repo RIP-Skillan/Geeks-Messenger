@@ -15,6 +15,7 @@ public:
 
     void start();
     void write(const geeks::ChatMessage& msg); 
+    void close(); 
 
 private:
     void do_write();

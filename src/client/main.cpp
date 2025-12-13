@@ -4,10 +4,13 @@
 
 using boost::asio::ip::tcp;
 
+// TODO: Replace with your GCP Server Public IP
+const std::string DEFAULT_SERVER_IP = "34.45.120.67"; 
+
 int main(int argc, char* argv[]) {
 
     try {
-        std::string host = "127.0.0.1";
+        std::string host = DEFAULT_SERVER_IP;
         unsigned short port = 12345;
 
         if (argc > 1) host = argv[1];
@@ -60,6 +63,19 @@ int main(int argc, char* argv[]) {
                 msg.set_password(password);
                 msg.set_text("Joined room " + current_room); // Optional text
                 std::cout << "Joining room: " << current_room << "...\n";
+            } else if (line == "/leave") {
+                if (current_room.empty()) {
+                    std::cout << "You are not in a room.\n";
+                    continue;
+                }
+                msg.set_type(geeks::ChatMessage::LEAVE);
+                msg.set_room_id(current_room);
+                std::cout << "Leaving room: " << current_room << "...\n";
+                current_room.clear();
+            } else if (line == "/quit" || line == "/exit") {
+                std::cout << "Exiting application...\n";
+                client.close();
+                break;
             } else {
                 if (current_room.empty()) {
                     std::cout << "You must join a room first! Use /join <room_id>\n";

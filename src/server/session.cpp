@@ -66,6 +66,12 @@ void Session::read_body(std::size_t length) {
                         } else {
                             std::cout << "User " << msg.from_user() << " tried to send message without joining a room.\n";
                         }
+                    } else if (msg.type() == geeks::ChatMessage::LEAVE) {
+                        if (room_) {
+                            std::cout << "User " << username_ << " leaving room " << msg.room_id() << "\n";
+                            room_->leave(shared_from_this());
+                            room_.reset();
+                        }
                     }
                 }
                 read_header();

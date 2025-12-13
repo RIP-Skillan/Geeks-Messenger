@@ -108,3 +108,9 @@ void ChatClient::do_write() {
             }
         });
 }
+
+void ChatClient::close() {
+    boost::asio::post(io_, [this]() {
+        socket_.close();
+    });
+}
