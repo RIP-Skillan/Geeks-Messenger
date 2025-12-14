@@ -28,14 +28,9 @@ sudo apt install ./geeks-messenger-client-1.0.0-Linux.deb
 ```
 
 ### Linux (Fedora/RHEL)
-Download the latest `.rpm` from [Releases](https://github.com/RIP-Skillan/Geeks-Messenger/releases).
-**Using DNF (Recommended):**
+Install directly from GitHub Releases:
 ```bash
-sudo dnf install ./geeks-messenger-1.0.0-1.fc42.x86_64.rpm
-```
-**Using RPM directly:**
-```bash
-sudo rpm -i geeks-messenger-1.0.0-1.fc42.x86_64.rpm
+sudo dnf install https://github.com/RIP-Skillan/Geeks-Messenger/releases/download/v1.0.0/geeks-messenger-1.0.0-1.fc42.x86_64.rpm
 ```
 
 ### Windows
