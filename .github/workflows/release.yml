@@ -18,8 +18,6 @@ jobs:
       uses: lukka/run-vcpkg@v11
       with:
         vcpkgDirectory: ${{ github.workspace }}/vcpkg
-        vcpkgGitCommitId: '8765717e47764121759928509d3b3846664d9946' # Pin a specific commit for stability
-        vcpkgJsonGlob: 'vcpkg.json'
 
     - name: Install Dependencies (Boost, Protobuf)
       run: |
