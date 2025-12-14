@@ -12,7 +12,7 @@ jobs:
     runs-on: windows-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Restore artifacts, or setup vcpkg
       uses: lukka/run-vcpkg@v11
@@ -35,7 +35,7 @@ jobs:
       run: cmake --build build --config Release
 
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: windows-binaries
         path: |
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install Dependencies
       run: |
@@ -60,7 +60,7 @@ jobs:
       run: cmake --build build --config Release
 
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: linux-binaries
         path: |
