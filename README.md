@@ -24,7 +24,7 @@
 ### Linux (Debian/Ubuntu)
 Download the latest `.deb` from [Releases](https://github.com/RIP-Skillan/Geeks-Messenger/releases).
 ```bash
-sudo apt install ./geeks-messenger-client-1.0.0-Linux.deb
+sudo apt install https://github.com/RIP-Skillan/Geeks-Messenger/releases/download/V1.0.0/geeks-messenger-client-1.0.0-Linux.deb
 ```
 
 ### Linux (Fedora/RHEL)
