@@ -1,0 +1,68 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Restore artifacts, or setup vcpkg
+      uses: lukka/run-vcpkg@v11
+      with:
+        vcpkgDirectory: ${{ github.workspace }}/vcpkg
+        vcpkgGitCommitId: '8765717e47764121759928509d3b3846664d9946' # Pin a specific commit for stability
+        vcpkgJsonGlob: 'vcpkg.json'
+
+    - name: Install Dependencies (Boost, Protobuf)
+      run: |
+        $vcpkgRoot = "${{ github.workspace }}/vcpkg"
+        & "$vcpkgRoot/vcpkg" install boost-asio:x64-windows protobuf:x64-windows boost-system:x64-windows
+      shell: powershell
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build --config Release
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: windows-binaries
+        path: |
+          build/src/client/Release/client_app.exe
+          build/src/server/Release/server_app.exe
+
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libboost-all-dev libprotobuf-dev protobuf-compiler
+
+    - name: Configure CMake
+      run: cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build --config Release
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: linux-binaries
+        path: |
+          build/src/client/client_app
+          build/src/server/server_app
